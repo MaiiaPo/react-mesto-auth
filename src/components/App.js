@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import { Route, Routes } from "react-router-dom";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -9,6 +10,9 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import Login from "./Login";
+import Register from "./Register";
+import ProtectedRouteElement from "./ProtectedRoute";
 
 function App() {
   // Видимость попапов
@@ -25,6 +29,9 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState(null);
 
   const [isLoading, setIsLoading] = React.useState(false);
+
+  // Авторизован пользователь или нет
+  const [loggedIn, setLoggedIn] = React.useState(true);
 
   React.useEffect(() => {
     api.getUserData().then((userData) => {
@@ -146,15 +153,26 @@ function App() {
       <div className="page">
         <CurrentUserContext.Provider value={currentUser}>
           <Header />
-          <Main
-            cards={cards}
-            onEditAvatar={handleEditAvatarClick}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
-          />
+          <Routes>
+            <Route path="/sign-up" element={<Register />} />
+            <Route path="/sign-in" element={<Login />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRouteElement
+                  element={Main}
+                  loggedIn={loggedIn}
+                  cards={cards}
+                  onEditAvatar={handleEditAvatarClick}
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onCardClick={handleCardClick}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                />
+              }
+            />
+          </Routes>
           <Footer />
           <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
