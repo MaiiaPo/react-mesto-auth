@@ -148,6 +148,10 @@ function App() {
       .finally(() => setIsLoading(false));
   }
 
+  function handleLogin (e) {
+    setLoggedIn(true);
+  }
+
   return (
     <div className="App">
       <div className="page">
@@ -155,7 +159,7 @@ function App() {
           <Header />
           <Routes>
             <Route path="/sign-up" element={<Register />} />
-            <Route path="/sign-in" element={<Login />} />
+            <Route path="/sign-in" element={<Login handleLogin={handleLogin} />} />
             <Route
               path="/"
               element={
