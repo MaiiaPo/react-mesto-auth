@@ -13,6 +13,7 @@ import AddPlacePopup from "./AddPlacePopup";
 import Login from "./Login";
 import Register from "./Register";
 import ProtectedRouteElement from "./ProtectedRoute";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
   // Видимость попапов
@@ -32,6 +33,9 @@ function App() {
 
   // Авторизован пользователь или нет
   const [loggedIn, setLoggedIn] = React.useState(false);
+
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
+  const [isSuccessAuth, setIsSuccessAuth] = React.useState(false);
 
   React.useEffect(() => {
     api.getUserData().then((userData) => {
@@ -69,6 +73,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
+    setIsInfoTooltipOpen(false);
 
     setSelectedCard(null);
   }
@@ -152,14 +157,20 @@ function App() {
     setLoggedIn(true);
   }
 
+  function handleIsInfoTooltipOpen(e) {
+    console.log(e);
+    setIsInfoTooltipOpen(e.open);
+    setIsSuccessAuth(e.success)
+  }
+
   return (
     <div className="App">
       <div className="page">
         <CurrentUserContext.Provider value={currentUser}>
           <Header />
           <Routes>
-            <Route path="/sign-up" element={<Register />} />
-            <Route path="/sign-in" element={<Login handleLogin={handleLogin} />} />
+            <Route path="/sign-up" element={<Register setIsInfoTooltipOpen={handleIsInfoTooltipOpen} />} />
+            <Route path="/sign-in" element={<Login handleLogin={handleLogin}  />} />
             <Route
               path="/"
               element={
@@ -206,6 +217,11 @@ function App() {
           <ImagePopup
             card={selectedCard}
             onClose={closeAllPopups}
+          />
+          <InfoTooltip
+            isOpen={isInfoTooltipOpen}
+            onClose={closeAllPopups}
+            isSuccess={isSuccessAuth}
           />
         </CurrentUserContext.Provider>
       </div>
