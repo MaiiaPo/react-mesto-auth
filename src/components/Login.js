@@ -19,9 +19,11 @@ function Login(props) {
         props.handleLogin();
         navigate('/');
       }
-
-      })
-      .catch(err => console.log(err));
+    })
+    .catch(err => {
+      console.log(err)
+      props.setIsInfoTooltipOpen({open: true, success: false});
+    });
   }
 
   return (

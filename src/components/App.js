@@ -14,6 +14,8 @@ import Login from "./Login";
 import Register from "./Register";
 import ProtectedRouteElement from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
+import {auth} from "../utils/auth";
+import { Link, useNavigate } from 'react-router-dom';
 
 function App() {
   // Видимость попапов
@@ -37,7 +39,31 @@ function App() {
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [isSuccessAuth, setIsSuccessAuth] = React.useState(false);
 
-  React.useEffect(() => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // настало время проверить токен
+    tokenCheck();
+  }, [])
+
+  const tokenCheck = () => {
+    // если у пользователя есть токен в localStorage,
+    // эта функция проверит, действующий он или нет
+    if (localStorage.getItem('jwt')){
+      const jwt = localStorage.getItem('jwt');
+
+      auth.getToken(jwt).then((res) => {
+        if (res){
+          console.log(res)
+          // авторизуем пользователя
+          setLoggedIn(true);
+          navigate("/", {replace: true})
+        }
+      });
+    }
+  }
+
+  useEffect(() => {
     api.getUserData().then((userData) => {
       setCurrentUser(userData);
     })
@@ -170,7 +196,7 @@ function App() {
           <Header />
           <Routes>
             <Route path="/sign-up" element={<Register setIsInfoTooltipOpen={handleIsInfoTooltipOpen} />} />
-            <Route path="/sign-in" element={<Login handleLogin={handleLogin}  />} />
+            <Route path="/sign-in" element={<Login handleLogin={handleLogin} setIsInfoTooltipOpen={handleIsInfoTooltipOpen}  />} />
             <Route
               path="/"
               element={
