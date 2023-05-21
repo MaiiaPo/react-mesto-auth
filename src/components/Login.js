@@ -1,7 +1,7 @@
 import React from 'react';
 import {useForm} from "../hooks/useForm";
 import {auth} from '../utils/auth';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Login(props) {
   const {values, handleChange, setValues} = useForm({});
@@ -15,13 +15,14 @@ function Login(props) {
     }
     auth.authorize(email, password).then((data) => {
       if (data.token){
+        props.handleSetEmail(values.email);
         setValues({email: '', password: ''});
         props.handleLogin();
         navigate('/');
       }
     })
     .catch(err => {
-      console.log(err)
+      console.error(err)
       props.setIsInfoTooltipOpen({open: true, success: false});
     });
   }

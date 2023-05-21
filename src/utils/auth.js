@@ -17,19 +17,7 @@ class Api {
       },
       body: JSON.stringify({email, password})
     })
-      .then((response) => {
-        try {
-          if (response.status === 200){
-            return response.json();
-          }
-        } catch(e){
-          return (e)
-        }
-      })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => console.log(err));
+      .then((res) => this._checkResponse(res))
   };
 
   authorize = (email, password) => {

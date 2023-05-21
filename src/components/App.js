@@ -15,7 +15,7 @@ import Register from "./Register";
 import ProtectedRouteElement from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
 import {auth} from "../utils/auth";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
   // Видимость попапов
@@ -30,6 +30,7 @@ function App() {
 
   // Информация о пользователе
   const [currentUser, setCurrentUser] = React.useState(null);
+  const [userEmail, setUserEmail] = React.useState('');
 
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -54,10 +55,9 @@ function App() {
 
       auth.getToken(jwt).then((res) => {
         if (res){
-          console.log(res)
-          // авторизуем пользователя
           setLoggedIn(true);
           navigate("/", {replace: true})
+          setUserEmail(res.data.email);
         }
       });
     }
@@ -179,24 +179,34 @@ function App() {
       .finally(() => setIsLoading(false));
   }
 
-  function handleLogin (e) {
+  function handleLogin () {
     setLoggedIn(true);
   }
 
   function handleIsInfoTooltipOpen(e) {
-    console.log(e);
     setIsInfoTooltipOpen(e.open);
     setIsSuccessAuth(e.success)
+  }
+
+  function handleSetEmail(e) {
+    setUserEmail(e);
   }
 
   return (
     <div className="App">
       <div className="page">
         <CurrentUserContext.Provider value={currentUser}>
-          <Header />
+          <Header email={userEmail} loggedIn={loggedIn} handleSignOut={handleSetEmail}/>
           <Routes>
             <Route path="/sign-up" element={<Register setIsInfoTooltipOpen={handleIsInfoTooltipOpen} />} />
-            <Route path="/sign-in" element={<Login handleLogin={handleLogin} setIsInfoTooltipOpen={handleIsInfoTooltipOpen}  />} />
+            <Route path="/sign-in"
+             element={
+              <Login
+                handleLogin={handleLogin}
+                setIsInfoTooltipOpen={handleIsInfoTooltipOpen}
+                handleSetEmail={handleSetEmail}
+              />}
+            />
             <Route
               path="/"
               element={

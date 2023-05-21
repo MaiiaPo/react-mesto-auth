@@ -4,19 +4,16 @@ import {auth} from '../utils/auth';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Register(props) {
-  const {values, handleChange, setValues} = useForm({})
+  const {values, handleChange} = useForm({})
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const { email, password } = values;
     auth.register(email, password)
-      .then((res) => {
-        if(res.ok){
-          props.setIsInfoTooltipOpen({open: true, success: true});
-          navigate('/sign-in', {replace: true});
-        }
-        props.setIsInfoTooltipOpen({open: true, success: false});
+      .then(() => {
+        props.setIsInfoTooltipOpen({open: true, success: true});
+        navigate('/sign-in', {replace: true});
       })
       .catch((e) => {
       console.error(e)
@@ -53,7 +50,7 @@ function Register(props) {
         <button className="auth__submit" type="submit">Зарегистрироваться</button>
       </form>
 
-      <p className="auth__sign-in">Уже зарегистрированы? <Link to='/sign-in'>Войти</Link></p>
+      <p className="auth__register-text">Уже зарегистрированы? <Link to='/sign-in' className="auth__sign-in">Войти</Link></p>
     </div>
   )
 }
