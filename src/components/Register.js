@@ -1,6 +1,6 @@
 import React from 'react';
 import {useForm} from "../hooks/useForm";
-import * as auth from '../utils/auth';
+import {auth} from '../utils/auth';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Register() {
