@@ -31,7 +31,7 @@ function App() {
   const [isLoading, setIsLoading] = React.useState(false);
 
   // Авторизован пользователь или нет
-  const [loggedIn, setLoggedIn] = React.useState(true);
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
     api.getUserData().then((userData) => {
