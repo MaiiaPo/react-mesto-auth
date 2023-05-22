@@ -179,6 +179,21 @@ function App() {
       .finally(() => setIsLoading(false));
   }
 
+  function handleRegister (values) {
+    const { email, password } = values;
+    auth.register(email, password)
+      .then(() => {
+        setIsInfoTooltipOpen(true);
+        setIsSuccessAuth(true)
+        navigate('/sign-in', {replace: true});
+      })
+      .catch((e) => {
+        setIsInfoTooltipOpen(true);
+        setIsSuccessAuth(false)
+        console.error(e)
+      });
+  }
+
   function handleLogin () {
     setLoggedIn(true);
   }
@@ -198,7 +213,7 @@ function App() {
         <CurrentUserContext.Provider value={currentUser}>
           <Header email={userEmail} loggedIn={loggedIn} handleSignOut={handleSetEmail}/>
           <Routes>
-            <Route path="/sign-up" element={<Register setIsInfoTooltipOpen={handleIsInfoTooltipOpen} />} />
+            <Route path="/sign-up" element={<Register handleRegister={handleRegister}/>} />
             <Route path="/sign-in"
              element={
               <Login
