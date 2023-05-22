@@ -8,11 +8,13 @@ function Register({ handleRegister }) {
   return (
     <div className="content auth">
       <h1 className="auth__title">Регистрация</h1>
-      <form className="auth__form"
+      <form
+        className="auth__form"
         onSubmit={(e) => {
-        e.preventDefault();
-        handleRegister(values);
-      }}>
+          e.preventDefault();
+          handleRegister(values);
+        }}
+      >
         <input
           className="auth__input"
           name="email"

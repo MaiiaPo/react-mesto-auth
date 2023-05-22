@@ -1,36 +1,19 @@
 import React from 'react';
 import {useForm} from "../hooks/useForm";
-import {auth} from '../utils/auth';
-import { useNavigate } from 'react-router-dom';
 
-function Login(props) {
-  const {values, handleChange, setValues} = useForm({});
-  const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { email, password } = values;
-    if (!email || !password){
-      return;
-    }
-    auth.authorize(email, password).then((data) => {
-      if (data.token){
-        props.handleSetEmail(values.email);
-        setValues({email: '', password: ''});
-        props.handleLogin();
-        navigate('/');
-      }
-    })
-    .catch(err => {
-      console.error(err)
-      props.setIsInfoTooltipOpen({open: true, success: false});
-    });
-  }
+function Login( { handleLogin }) {
+  const {values, handleChange} = useForm({});
 
   return (
     <div className="content auth">
         <h1 className="auth__title">Вход</h1>
-        <form className="auth__form" onSubmit={handleSubmit}>
+        <form
+          className="auth__form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleLogin(values);
+          }}
+        >
           <input
             className="auth__input"
             name="email"

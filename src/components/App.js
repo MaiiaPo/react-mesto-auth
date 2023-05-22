@@ -194,13 +194,25 @@ function App() {
       });
   }
 
-  function handleLogin () {
-    setLoggedIn(true);
-  }
+  function handleLogin (values) {
+    const { email, password } = values;
+    if (!email || !password){
+      return;
+    }
 
-  function handleIsInfoTooltipOpen(e) {
-    setIsInfoTooltipOpen(e.open);
-    setIsSuccessAuth(e.success)
+    auth.authorize(email, password).then((data) => {
+      if (data.token){
+        setUserEmail(email);
+        handleSetEmail(email);
+        setLoggedIn(true);
+        navigate('/');
+      }
+    })
+      .catch(err => {
+        console.error(err)
+        setIsInfoTooltipOpen(true);
+        setIsSuccessAuth(false)
+      });
   }
 
   function handleSetEmail(e) {
@@ -214,14 +226,7 @@ function App() {
           <Header email={userEmail} loggedIn={loggedIn} handleSignOut={handleSetEmail}/>
           <Routes>
             <Route path="/sign-up" element={<Register handleRegister={handleRegister}/>} />
-            <Route path="/sign-in"
-             element={
-              <Login
-                handleLogin={handleLogin}
-                setIsInfoTooltipOpen={handleIsInfoTooltipOpen}
-                handleSetEmail={handleSetEmail}
-              />}
-            />
+            <Route path="/sign-in" element={<Login handleLogin={handleLogin}/>}/>
             <Route
               path="/"
               element={
