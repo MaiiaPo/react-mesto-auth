@@ -64,20 +64,15 @@ function App() {
   }
 
   useEffect(() => {
-    api.getUserData().then((userData) => {
-      setCurrentUser(userData);
-    })
+    loggedIn && Promise.all([api.getUserData(), api.getInitialCards()])
+      .then(([userData, cardsData]) => {
+        setCurrentUser(userData);
+        setCards(cardsData);
+      })
       .catch((err) => {
         console.error(err);
       });
-
-    api.getInitialCards().then((cardsData) => {
-      setCards(cardsData);
-    })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
+  }, [loggedIn]);
 
   function handleCardClick(card) {
     setSelectedCard(card);
