@@ -203,7 +203,6 @@ function App() {
     auth.authorize(email, password).then((data) => {
       if (data.token){
         setUserEmail(email);
-        handleSetEmail(email);
         setLoggedIn(true);
         navigate('/');
       }
@@ -215,15 +214,16 @@ function App() {
       });
   }
 
-  function handleSetEmail(e) {
-    setUserEmail(e);
+  function handleSignOut() {
+    localStorage.removeItem('jwt');
+    setUserEmail('');
   }
 
   return (
     <div className="App">
       <div className="page">
         <CurrentUserContext.Provider value={currentUser}>
-          <Header email={userEmail} loggedIn={loggedIn} handleSignOut={handleSetEmail}/>
+          <Header email={userEmail} loggedIn={loggedIn} handleSignOut={handleSignOut}/>
           <Routes>
             <Route path="/sign-up" element={<Register handleRegister={handleRegister}/>} />
             <Route path="/sign-in" element={<Login handleLogin={handleLogin}/>}/>

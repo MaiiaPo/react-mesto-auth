@@ -1,15 +1,8 @@
 import headerLogoMobile from "../images/logo_mobile.svg";
 import headerLogo from "../images/logo.svg";
-import { Route, Routes, Link, useNavigate  } from 'react-router-dom';
+import { Route, Routes, Link  } from 'react-router-dom';
 
 function Header(props) {
-  const navigate = useNavigate ();
-
-  function signOut(){
-    localStorage.removeItem('jwt');
-    props.handleSignOut('');
-    navigate('/sign-in');
-  }
   return (
     <header className="header">
       <div className="header__container">
@@ -22,12 +15,11 @@ function Header(props) {
         <div className="header__info-user">
           {props.loggedIn && <div className="header__email">{ props.email }</div>}
           <Routes>
-            <Route path="/" element={<Link className="header__auth" onClick={signOut} to="/sign-in">Выйти</Link>}/>
+            <Route path="/" element={<Link className="header__auth" onClick={props.handleSignOut} to="/sign-in">Выйти</Link>}/>
             <Route path="/sign-up" element={<Link className="header__auth" to="/sign-in">Войти</Link>}/>
             <Route path="/sign-in" element={<Link className="header__auth" to="/sign-up">Регистрация</Link>} />
           </Routes>
         </div>
-
       </div>
     </header>
   )
