@@ -44,7 +44,6 @@ class Api {
         Authorization: `Bearer ${token}`,
       },
     }).then((res) => this._checkResponse(res))
-      .then(data => data);
   };
 }
 

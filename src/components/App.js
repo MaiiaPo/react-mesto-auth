@@ -59,7 +59,8 @@ function App() {
           navigate("/", {replace: true})
           setUserEmail(res.data.email);
         }
-      });
+      })
+        .catch((err) => console.error(err));
     }
   }
 
